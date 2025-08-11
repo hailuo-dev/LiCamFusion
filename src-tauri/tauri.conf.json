@@ -12,14 +12,16 @@
   "app": {
     "windows": [
       {
-        "title": "LiCam",
+        "title": "LiCamFusion powered by HailuoDev",
         "width": 1400,
         "height": 900,
         "minWidth": 1000,
         "minHeight": 700,
         "resizable": true,
         "fullscreen": false,
-        "label": "main"
+        "label": "main",
+
+        "decorations": true
       }
     ],
     "security": {
@@ -30,7 +32,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "icon": []
+    "icon": ["icons/icon.ico"]
   },
   "plugins": {
     "fs": {
