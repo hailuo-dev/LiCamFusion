@@ -205,24 +205,22 @@ function App() {
         }
       }}
     >
-      <Layout className="app-layout">
-        <Header className="app-header">
-          <Title level={2} style={{ margin: 0, color: '#00d9ff' }}>
-            🎬 LiCam
-          </Title>
-        </Header>
+      <div className="h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 overflow-hidden">
+        {/* Header */}
+        <header className="relative h-16 bg-gradient-to-r from-black via-slate-900 to-black border-b border-primary/20 backdrop-blur-sm">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 opacity-50" />
+          <div className="relative z-10 flex items-center px-8 h-full">
+            <h1 className="text-2xl font-bold text-primary drop-shadow-lg">
+              🎬 LiCam
+            </h1>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
+        </header>
         
-        <Layout className="main-layout">
+        <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
           {/* 左侧面板 - 文件目录选择 */}
-          <Sider 
-            width={320} 
-            className="left-sider"
-            style={{ 
-              background: '#1a1a1a',
-              borderRight: '1px solid #404040'
-            }}
-          >
-            <div className="left-panel">
+          <div className="w-80 bg-background/30 border-r border-border/30 backdrop-blur-sm">
+            <div className="h-full p-3 overflow-y-auto">
               <FileSelector
                 sourceDir={sourceDir}
                 outputDir={outputDir}
@@ -232,11 +230,11 @@ function App() {
                 disabled={processing}
               />
             </div>
-          </Sider>
+          </div>
 
           {/* 中间面板 - 筛选条件和视频列表 */}
-          <Content className="center-content">
-            <div className="center-panel">
+          <div className="flex-1 bg-background/20 backdrop-blur-sm">
+            <div className="h-full p-4 overflow-y-auto">
               {/* 筛选选项 */}
               <FilterOptions
                 options={filterOptions}
@@ -250,21 +248,16 @@ function App() {
 
               {/* 文件列表 - 栅格布局 */}
               {filteredFiles.length > 0 && (
-                <FileList files={filteredFiles} />
+                <div className="mt-4">
+                  <FileList files={filteredFiles} />
+                </div>
               )}
             </div>
-          </Content>
+          </div>
 
           {/* 右侧面板 - 视频处理信息 */}
-          <Sider 
-            width={340} 
-            className="right-sider"
-            style={{ 
-              background: '#1a1a1a',
-              borderLeft: '1px solid #404040'
-            }}
-          >
-            <div className="right-panel">
+          <div className="w-[340px] bg-background/30 border-l border-border/30 backdrop-blur-sm">
+            <div className="h-full p-3 overflow-y-auto space-y-4">
               {/* 处理面板 */}
               <ProcessingPanel
                 files={filteredFiles}
@@ -283,9 +276,9 @@ function App() {
                 outputFile={outputFile}
               />
             </div>
-          </Sider>
-        </Layout>
-      </Layout>
+          </div>
+        </div>
+      </div>
     </ConfigProvider>
   );
 }

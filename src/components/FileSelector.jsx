@@ -1,6 +1,8 @@
 import React from 'react';
-import { Card, Space, Input, Button, Row, Col, Statistic } from 'antd';
-import { FolderOpenOutlined } from '@ant-design/icons';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { FolderOpen, Download, Upload } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
 
@@ -55,70 +57,66 @@ const FileSelector = ({
   };
 
   return (
-    <Card 
-      title={<><FolderOpenOutlined /> 目录设置</>}
-      className="feature-card"
-      size="small"
-    >
-      <Space direction="vertical" style={{ width: '100%' }} size="small">
+    <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-lg">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-primary text-sm">
+          <FolderOpen className="h-4 w-4" />
+          目录设置
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
         {/* 源目录选择 */}
-        <div>
-          <div style={{ marginBottom: 4, fontWeight: 500, fontSize: 12, color: '#00d9ff' }}>
-            📥 源目录
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs font-medium text-blue-400">
+            <Upload className="h-3 w-3" />
+            源目录
           </div>
-          <Row gutter={8} align="middle">
-            <Col flex="1">
-              <Input
-                value={sourceDir}
-                placeholder="选择视频目录..."
-                readOnly
-                size="small"
-                style={{ fontSize: 12 }}
-              />
-            </Col>
-            <Col flex="none">
-              <Button
-                icon={<FolderOpenOutlined />}
-                onClick={selectSourceDir}
-                disabled={disabled}
-                size="small"
-                type="default"
-              >
-                浏览
-              </Button>
-            </Col>
-          </Row>
+          <div className="flex gap-2">
+            <Input
+              value={sourceDir}
+              placeholder="选择视频目录..."
+              readOnly
+              className="text-xs bg-background/50 border-border/50 focus:border-primary/50"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={selectSourceDir}
+              disabled={disabled}
+              className="shrink-0 border-border/50 hover:border-primary/50"
+            >
+              <FolderOpen className="h-3 w-3 mr-1" />
+              浏览
+            </Button>
+          </div>
         </div>
 
         {/* 输出目录选择 */}
-        <div>
-          <div style={{ marginBottom: 4, fontWeight: 500, fontSize: 12, color: '#00ff88' }}>
-            📤 输出目录
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs font-medium text-green-400">
+            <Download className="h-3 w-3" />
+            输出目录
           </div>
-          <Row gutter={8} align="middle">
-            <Col flex="1">
-              <Input
-                value={outputDir}
-                placeholder="选择输出目录..."
-                readOnly
-                size="small"
-                style={{ fontSize: 12 }}
-              />
-            </Col>
-            <Col flex="none">
-              <Button
-                icon={<FolderOpenOutlined />}
-                onClick={selectOutputDir}
-                disabled={disabled}
-                size="small"
-                type="default"
-              >
-                浏览
-              </Button>
-            </Col>
-          </Row>
+          <div className="flex gap-2">
+            <Input
+              value={outputDir}
+              placeholder="选择输出目录..."
+              readOnly
+              className="text-xs bg-background/50 border-border/50 focus:border-primary/50"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={selectOutputDir}
+              disabled={disabled}
+              className="shrink-0 border-border/50 hover:border-primary/50"
+            >
+              <FolderOpen className="h-3 w-3 mr-1" />
+              浏览
+            </Button>
+          </div>
         </div>
-      </Space>
+      </CardContent>
     </Card>
   );
 };

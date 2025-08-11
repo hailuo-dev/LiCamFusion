@@ -1,7 +1,12 @@
 import React from 'react';
-import { Card, Space, Checkbox, DatePicker, Select, Slider, Row, Col, Statistic, Alert, Button } from 'antd';
-import { FilterOutlined, CalendarOutlined, ClockCircleOutlined, VideoCameraOutlined, SearchOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { Badge } from '@/components/ui/badge';
+import { Filter, Calendar, Clock, Video, Search, AlertTriangle } from 'lucide-react';
+import { format, parse } from 'date-fns';
 
 const FilterOptions = ({
   options,
@@ -12,20 +17,20 @@ const FilterOptions = ({
   sourceDir,
   onScanFiles
 }) => {
-  const handleDateChange = (date, dateString) => {
+  const handleDateChange = (dateString) => {
     onChange({ selectedDate: dateString });
   };
 
   const handleHourChange = (value) => {
-    onChange({ selectedHour: value });
+    onChange({ selectedHour: value[0] });
   };
 
   const handleAngleChange = (value) => {
     onChange({ selectedAngle: value });
   };
 
-  const handleCheckboxChange = (field) => (e) => {
-    onChange({ [field]: e.target.checked });
+  const handleCheckboxChange = (field) => (checked) => {
+    onChange({ [field]: checked });
   };
 
   const getFilterSummary = () => {
@@ -39,145 +44,165 @@ const FilterOptions = ({
   };
 
   return (
-    <Card 
-      title={<><FilterOutlined /> 筛选条件设置</>}
-      className="feature-card"
-    >
-      <Space direction="vertical" style={{ width: '100%' }} size="large">
+    <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-primary">
+          <Filter className="h-5 w-5" />
+          筛选条件设置
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
         {/* 筛选选项 */}
-        <Row gutter={24}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 日期筛选 */}
-          <Col xs={24} md={8}>
-            <Space direction="vertical" style={{ width: '100%' }}>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 checked={options.byDate}
-                onChange={handleCheckboxChange('byDate')}
+                onCheckedChange={handleCheckboxChange('byDate')}
                 disabled={disabled}
+                id="date-filter"
+              />
+              <label
+                htmlFor="date-filter"
+                className="flex items-center gap-2 text-sm font-medium cursor-pointer"
               >
-                <CalendarOutlined /> 按日期筛选
-              </Checkbox>
-              {options.byDate && (
-                <DatePicker
-                  value={options.selectedDate ? dayjs(options.selectedDate) : null}
-                  onChange={handleDateChange}
+                <Calendar className="h-4 w-4 text-blue-400" />
+                按日期筛选
+              </label>
+            </div>
+            {options.byDate && (
+              <div className="pl-6">
+                <input
+                  type="date"
+                  value={options.selectedDate}
+                  onChange={(e) => handleDateChange(e.target.value)}
                   disabled={disabled}
-                  style={{ width: '100%' }}
-                  placeholder="选择日期"
+                  className="w-full px-3 py-2 text-sm bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
                 />
-              )}
-            </Space>
-          </Col>
+              </div>
+            )}
+          </div>
 
           {/* 时间筛选 */}
-          <Col xs={24} md={8}>
-            <Space direction="vertical" style={{ width: '100%' }}>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 checked={options.byHour}
-                onChange={handleCheckboxChange('byHour')}
+                onCheckedChange={handleCheckboxChange('byHour')}
                 disabled={disabled}
+                id="hour-filter"
+              />
+              <label
+                htmlFor="hour-filter"
+                className="flex items-center gap-2 text-sm font-medium cursor-pointer"
               >
-                <ClockCircleOutlined /> 按小时筛选
-              </Checkbox>
-              {options.byHour && (
-                <div>
-                  <div style={{ marginBottom: 8 }}>时间: {options.selectedHour}:00</div>
-                  <Slider
-                    min={0}
-                    max={23}
-                    value={options.selectedHour}
-                    onChange={handleHourChange}
-                    disabled={disabled}
-                    marks={{
-                      0: '0时',
-                      6: '6时',
-                      12: '12时',
-                      18: '18时',
-                      23: '23时'
-                    }}
-                  />
+                <Clock className="h-4 w-4 text-green-400" />
+                按小时筛选
+              </label>
+            </div>
+            {options.byHour && (
+              <div className="pl-6 space-y-3">
+                <div className="text-sm text-blue-400">
+                  时间: {options.selectedHour}:00
                 </div>
-              )}
-            </Space>
-          </Col>
+                <Slider
+                  value={[options.selectedHour]}
+                  onValueChange={handleHourChange}
+                  max={23}
+                  step={1}
+                  disabled={disabled}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>0时</span>
+                  <span>6时</span>
+                  <span>12时</span>
+                  <span>18时</span>
+                  <span>23时</span>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* 视角筛选 */}
-          <Col xs={24} md={8}>
-            <Space direction="vertical" style={{ width: '100%' }}>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 checked={options.byAngle}
-                onChange={handleCheckboxChange('byAngle')}
+                onCheckedChange={handleCheckboxChange('byAngle')}
                 disabled={disabled}
+                id="angle-filter"
+              />
+              <label
+                htmlFor="angle-filter"
+                className="flex items-center gap-2 text-sm font-medium cursor-pointer"
               >
-                <VideoCameraOutlined /> 按视角筛选
-              </Checkbox>
-              {options.byAngle && (
-                <Select
-                  value={options.selectedAngle}
-                  onChange={handleAngleChange}
-                  disabled={disabled}
-                  style={{ width: '100%' }}
-                  options={[
-                    { value: 'F', label: '📹 前视角 (F)' },
-                    { value: 'A', label: '🎥 所有视角 (A)' }
-                  ]}
-                />
-              )}
-            </Space>
-          </Col>
-        </Row>
+                <Video className="h-4 w-4 text-purple-400" />
+                按视角筛选
+              </label>
+            </div>
+            {options.byAngle && (
+              <div className="pl-6">
+                <Select value={options.selectedAngle} onValueChange={handleAngleChange} disabled={disabled}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="选择视角" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="F">📹 前视角 (F)</SelectItem>
+                    <SelectItem value="A">🎥 所有视角 (A)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* 筛选结果统计 */}
-        <Row gutter={16}>
-          <Col xs={12} sm={8}>
-            <Statistic
-              title="已扫描文件"
-              value={scannedCount}
-              suffix="个"
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Col>
-          <Col xs={12} sm={8}>
-            <Statistic
-              title="符合条件"
-              value={filteredCount}
-              suffix="个"
-              valueStyle={{ color: filteredCount > 0 ? '#52c41a' : '#ff4d4f' }}
-            />
-          </Col>
-          <Col xs={24} sm={8}>
-            <div style={{ marginTop: 8 }}>
-              <div style={{ fontSize: 14, color: '#666', marginBottom: 4 }}>当前筛选条件</div>
-              <div style={{ fontSize: 12, color: '#1890ff' }}>
-                {getFilterSummary()}
-              </div>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-background/30 rounded-lg border border-border/50">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-blue-400">{scannedCount}</div>
+            <div className="text-xs text-muted-foreground">已扫描文件</div>
+          </div>
+          <div className="text-center">
+            <div className={`text-2xl font-bold ${filteredCount > 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {filteredCount}
             </div>
-          </Col>
-        </Row>
+            <div className="text-xs text-muted-foreground">符合条件</div>
+          </div>
+          <div className="col-span-2 lg:col-span-1 lg:text-center">
+            <div className="text-xs text-muted-foreground mb-1">当前筛选条件</div>
+            <Badge variant="secondary" className="text-xs">
+              {getFilterSummary()}
+            </Badge>
+          </div>
+        </div>
 
         {/* 扫描按钮 */}
-        <div style={{ textAlign: 'center', padding: '16px 0', borderTop: '1px solid #f0f0f0' }}>
+        <div className="pt-4 border-t border-border/30">
           <Button
-            type="primary"
-            icon={<SearchOutlined />}
             onClick={onScanFiles}
             disabled={!sourceDir || disabled}
-            size="large"
-            style={{ minWidth: 200 }}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+            size="lg"
           >
-            <VideoCameraOutlined /> 扫描视频文件
+            <Search className="mr-2 h-4 w-4" />
+            <Video className="mr-2 h-4 w-4" />
+            扫描视频文件
           </Button>
         </div>
 
         {/* 提示信息 */}
         {scannedCount > 0 && filteredCount === 0 && (
-          <Alert
-            message="没有找到符合条件的文件"
-            description="请调整筛选条件或检查文件命名格式"
-            type="warning"
-            showIcon
-          />
+          <div className="flex items-start gap-3 p-4 bg-yellow-950/20 border border-yellow-500/30 rounded-lg">
+            <AlertTriangle className="h-5 w-5 text-yellow-400 mt-0.5" />
+            <div>
+              <div className="text-sm font-medium text-yellow-400">没有找到符合条件的文件</div>
+              <div className="text-xs text-yellow-300/80 mt-1">请调整筛选条件或检查文件命名格式</div>
+            </div>
+          </div>
         )}
-      </Space>
+      </CardContent>
     </Card>
   );
 };

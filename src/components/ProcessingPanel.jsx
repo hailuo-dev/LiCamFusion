@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card, Button, Space, Row, Col, Typography, Descriptions } from 'antd';
-import { PlayCircleOutlined, PauseCircleOutlined, StopOutlined } from '@ant-design/icons';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Play, Pause, Square, Video, FileText, Settings, AlertCircle } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
-
-const { Text } = Typography;
 
 const ProcessingPanel = ({
   files,
@@ -115,89 +115,89 @@ const ProcessingPanel = ({
   };
 
   return (
-    <Card 
-      title={<><PlayCircleOutlined /> 视频处理</>}
-      className="feature-card"
-      size="small"
-    >
-      <Space direction="vertical" style={{ width: '100%' }} size="small">
+    <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-lg">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-primary text-sm">
+          <Video className="h-4 w-4" />
+          视频处理
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
         {/* 处理信息 */}
-        <div style={{ 
-          background: '#262626', 
-          padding: '8px 12px', 
-          borderRadius: 6, 
-          border: '1px solid #404040' 
-        }}>
-          <div style={{ marginBottom: 6, fontSize: 12 }}>
-            <Text style={{ color: '#00d9ff' }}>文件数量：</Text>
-            <Text strong style={{ color: '#ffffff' }}>{files.length}个</Text>
+        <div className="p-3 bg-background/50 border border-border/50 rounded-lg space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-blue-400">文件数量:</span>
+            <Badge variant="secondary" className="text-xs">
+              {files.length}个
+            </Badge>
           </div>
-          <div style={{ marginBottom: 6, fontSize: 12 }}>
-            <Text style={{ color: '#00d9ff' }}>输出：</Text>
-            <Text 
-              style={{ 
-                color: '#ffffff', 
-                fontSize: 11,
-                wordBreak: 'break-all'
-              }}
+          <div className="space-y-1">
+            <div className="text-xs text-blue-400">输出文件:</div>
+            <div 
+              className="text-xs text-white font-mono bg-black/30 p-2 rounded border break-all"
               title={getOutputFileName()}
             >
               {getOutputFileName()}
-            </Text>
+            </div>
           </div>
-          <div style={{ fontSize: 12 }}>
-            <Text style={{ color: '#00d9ff' }}>模式：</Text>
-            <Text style={{ color: '#00ff88', fontSize: 11 }}>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-blue-400">处理模式:</span>
+            <Badge variant="outline" className="text-xs text-green-400 border-green-400/50">
               {getMergeTypeDescription()}
-            </Text>
+            </Badge>
           </div>
         </div>
 
         {/* 操作按钮 */}
-        <div style={{ textAlign: 'center' }}>
-          <Space direction="vertical" size="small" style={{ width: '100%' }}>
-            <Button
-              type="primary"
-              size="middle"
-              icon={processing ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
-              onClick={startProcessing}
-              disabled={!canProcess()}
-              loading={processing}
-              style={{ width: '100%' }}
-            >
-              {processing ? '处理中...' : '开始合成'}
-            </Button>
-            
-            {processing && (
-              <Button
-                size="small"
-                icon={<StopOutlined />}
-                onClick={() => {
-                  // TODO: 实现停止功能
-                  console.log('停止处理');
-                }}
-                style={{ width: '100%' }}
-              >
-                停止
-              </Button>
+        <div className="space-y-2">
+          <Button
+            onClick={startProcessing}
+            disabled={!canProcess() || processing}
+            className={`w-full ${
+              processing 
+                ? 'bg-yellow-600 hover:bg-yellow-500' 
+                : 'bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-500 hover:to-blue-500'
+            } text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300`}
+          >
+            {processing ? (
+              <>
+                <Pause className="mr-2 h-4 w-4" />
+                处理中...
+              </>
+            ) : (
+              <>
+                <Play className="mr-2 h-4 w-4" />
+                开始合成
+              </>
             )}
-          </Space>
+          </Button>
+          
+          {processing && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                // TODO: 实现停止功能
+                console.log('停止处理');
+              }}
+              className="w-full"
+            >
+              <Square className="mr-2 h-3 w-3" />
+              停止
+            </Button>
+          )}
         </div>
 
         {/* 处理要求提示 */}
         {!canProcess() && (
-          <div style={{ 
-            padding: 8, 
-            background: 'rgba(255, 170, 0, 0.1)', 
-            borderRadius: 6, 
-            border: '1px solid #ffaa00' 
-          }}>
-            <Text style={{ color: '#ffaa00', fontSize: 11 }}>
+          <div className="flex items-start gap-2 p-3 bg-orange-950/20 border border-orange-500/30 rounded-lg">
+            <AlertCircle className="h-4 w-4 text-orange-400 mt-0.5 shrink-0" />
+            <div className="text-xs text-orange-300">
               请确保已选择目录、扫描文件、设置筛选条件
-            </Text>
+            </div>
           </div>
         )}
-      </Space>
+      </CardContent>
     </Card>
   );
 
