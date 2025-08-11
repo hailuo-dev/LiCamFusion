@@ -57,18 +57,18 @@ const FileSelector = ({
   };
 
   return (
-    <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-lg">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-primary text-sm">
-          <FolderOpen className="h-4 w-4" />
-          目录设置
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="bg-neutral-900 p-6 hover:border-neutral-700 transition-all duration-300">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 bg-white rounded-lg">
+          <FolderOpen className="h-4 w-4 text-black" />
+        </div>
+        <h3 className="text-lg font-semibold text-white">目录设置</h3>
+      </div>
+      <div className="space-y-4">
         {/* 源目录选择 */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-xs font-medium text-blue-400">
-            <Upload className="h-3 w-3" />
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm font-medium text-white">
+            <Upload className="h-4 w-4 text-neutral-400" />
             源目录
           </div>
           <div className="flex gap-2">
@@ -76,25 +76,25 @@ const FileSelector = ({
               value={sourceDir}
               placeholder="选择视频目录..."
               readOnly
-              className="text-xs bg-background/50 border-border/50 focus:border-primary/50"
+              className="text-sm bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-400 focus:border-white"
             />
             <Button
               variant="outline"
               size="sm"
               onClick={selectSourceDir}
               disabled={disabled}
-              className="shrink-0 border-border/50 hover:border-primary/50"
+              className="shrink-0"
             >
-              <FolderOpen className="h-3 w-3 mr-1" />
+              <FolderOpen className="h-4 w-4 mr-1" />
               浏览
             </Button>
           </div>
         </div>
 
         {/* 输出目录选择 */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-xs font-medium text-green-400">
-            <Download className="h-3 w-3" />
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm font-medium text-white">
+            <Download className="h-4 w-4 text-neutral-400" />
             输出目录
           </div>
           <div className="flex gap-2">
@@ -102,22 +102,22 @@ const FileSelector = ({
               value={outputDir}
               placeholder="选择输出目录..."
               readOnly
-              className="text-xs bg-background/50 border-border/50 focus:border-primary/50"
+              className="text-sm bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-400 focus:border-white"
             />
             <Button
               variant="outline"
               size="sm"
               onClick={selectOutputDir}
               disabled={disabled}
-              className="shrink-0 border-border/50 hover:border-primary/50"
+              className="shrink-0"
             >
-              <FolderOpen className="h-3 w-3 mr-1" />
+              <FolderOpen className="h-4 w-4 mr-1" />
               浏览
             </Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

@@ -95,69 +95,67 @@ const ProcessingPanel = ({
 
   const getOutputFileName = () => {
     const mergeType = getMergeType();
-    const now = new Date();
-    const timestamp = now.toISOString().slice(0, 19).replace(/[:-]/g, '');
     
     switch (mergeType.type) {
       case 'ByDate':
-        return `LiCam_${mergeType.date.replace(/-/g, '')}_merged.mp4`;
+        return `合成_${mergeType.date.replace(/-/g, '')}.mp4`;
       case 'ByHour':
-        return `LiCam_${mergeType.date.replace(/-/g, '')}_${mergeType.hour.toString().padStart(2, '0')}h_merged.mp4`;
+        return `合成_${mergeType.date.replace(/-/g, '')}_${mergeType.hour.toString().padStart(2, '0')}时.mp4`;
       case 'ByAngle':
-        return `LiCam_${mergeType.angle}_${timestamp}_merged.mp4`;
+        const angleName = mergeType.angle === 'F' ? '前视角' : '所有视角';
+        return `合成_${angleName}.mp4`;
       case 'ByDateAndAngle':
-        return `LiCam_${mergeType.date.replace(/-/g, '')}_${mergeType.angle}_merged.mp4`;
+        const angleName2 = mergeType.angle === 'F' ? '前视角' : '所有视角';
+        return `合成_${mergeType.date.replace(/-/g, '')}_${angleName2}.mp4`;
       case 'ByHourAndAngle':
-        return `LiCam_${mergeType.date.replace(/-/g, '')}_${mergeType.hour.toString().padStart(2, '0')}h_${mergeType.angle}_merged.mp4`;
+        const angleName3 = mergeType.angle === 'F' ? '前视角' : '所有视角';
+        return `合成_${mergeType.date.replace(/-/g, '')}_${mergeType.hour.toString().padStart(2, '0')}时_${angleName3}.mp4`;
       default:
-        return `LiCam_${timestamp}_merged.mp4`;
+        return `合成_所有文件.mp4`;
     }
   };
 
   return (
-    <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-lg">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-primary text-sm">
-          <Video className="h-4 w-4" />
-          视频处理
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="bg-neutral-900 p-6 hover:border-neutral-700 transition-all duration-300">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 bg-white rounded-lg">
+          <Video className="h-4 w-4 text-black" />
+        </div>
+        <h3 className="text-lg font-semibold text-white">视频处理</h3>
+      </div>
+      <div className="space-y-4">
         {/* 处理信息 */}
-        <div className="p-3 bg-background/50 border border-border/50 rounded-lg space-y-2">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-blue-400">文件数量:</span>
-            <Badge variant="secondary" className="text-xs">
+        <div className="p-4 bg-neutral-800 border border-neutral-700 rounded-lg space-y-3">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-neutral-300">文件数量:</span>
+            <Badge className="text-xs bg-white text-black">
               {files.length}个
             </Badge>
           </div>
-          <div className="space-y-1">
-            <div className="text-xs text-blue-400">输出文件:</div>
+          <div className="space-y-2">
+            <div className="text-sm text-neutral-300">输出文件:</div>
             <div 
-              className="text-xs text-white font-mono bg-black/30 p-2 rounded border break-all"
+              className="text-xs text-white font-mono bg-neutral-700 p-2 rounded border border-neutral-600 break-all"
               title={getOutputFileName()}
             >
               {getOutputFileName()}
             </div>
           </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-blue-400">处理模式:</span>
-            <Badge variant="outline" className="text-xs text-green-400 border-green-400/50">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-neutral-300">处理模式:</span>
+            <Badge className="text-xs bg-neutral-700 text-white border-neutral-600">
               {getMergeTypeDescription()}
             </Badge>
           </div>
         </div>
 
         {/* 操作按钮 */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Button
             onClick={startProcessing}
             disabled={!canProcess() || processing}
-            className={`w-full ${
-              processing 
-                ? 'bg-yellow-600 hover:bg-yellow-500' 
-                : 'bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-500 hover:to-blue-500'
-            } text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300`}
+            variant={processing ? "warning" : "success"}
+            className="w-full font-bold transform hover:scale-[1.02]"
           >
             {processing ? (
               <>
@@ -190,15 +188,17 @@ const ProcessingPanel = ({
 
         {/* 处理要求提示 */}
         {!canProcess() && (
-          <div className="flex items-start gap-2 p-3 bg-orange-950/20 border border-orange-500/30 rounded-lg">
-            <AlertCircle className="h-4 w-4 text-orange-400 mt-0.5 shrink-0" />
-            <div className="text-xs text-orange-300">
+          <div className="flex items-start gap-3 p-3 bg-neutral-800 border border-neutral-700 rounded-lg">
+            <div className="p-1 bg-orange-500 rounded">
+              <AlertCircle className="h-4 w-4 text-white" />
+            </div>
+            <div className="text-sm text-white">
               请确保已选择目录、扫描文件、设置筛选条件
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 
   function getMergeTypeDescription() {

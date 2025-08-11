@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Typography, ConfigProvider, theme } from 'antd';
-import zhCN from 'antd/locale/zh_CN';
 import { listen } from '@tauri-apps/api/event';
+import { Video, Activity, FileVideo } from 'lucide-react';
 import FileSelector from './components/FileSelector';
 import FilterOptions from './components/FilterOptions';
 import ProcessingPanel from './components/ProcessingPanel';
 import FileList from './components/FileList';
 import StatusDisplay from './components/StatusDisplay';
-
-const { Header, Content, Sider } = Layout;
-const { Title } = Typography;
 
 function App() {
   const [scannedFiles, setScannedFiles] = useState([]);
@@ -170,57 +166,44 @@ function App() {
   };
 
   return (
-    <ConfigProvider 
-      locale={zhCN}
-      theme={{
-        algorithm: theme.darkAlgorithm,
-        token: {
-          colorPrimary: '#00d9ff',
-          colorSuccess: '#00ff88',
-          colorWarning: '#ffaa00',
-          colorError: '#ff3366',
-          borderRadius: 8,
-          colorBgContainer: '#1a1a1a',
-          colorBgElevated: '#262626',
-          colorBgLayout: '#0a0a0a',
-          colorText: '#ffffff',
-          colorTextSecondary: '#a0a0a0',
-          colorBorder: '#404040',
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        },
-        components: {
-          Layout: {
-            colorBgHeader: '#000000',
-            colorBgBody: '#0a0a0a',
-            colorBgTrigger: '#1a1a1a',
-          },
-          Card: {
-            colorBgContainer: '#1a1a1a',
-            colorBorderSecondary: '#404040',
-          },
-          Button: {
-            borderRadius: 8,
-            primaryShadow: '0 4px 12px rgba(0, 217, 255, 0.3)',
-          }
-        }
-      }}
-    >
-      <div className="h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 overflow-hidden">
-        {/* Header */}
-        <header className="relative h-16 bg-gradient-to-r from-black via-slate-900 to-black border-b border-primary/20 backdrop-blur-sm">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 opacity-50" />
-          <div className="relative z-10 flex items-center px-8 h-full">
-            <h1 className="text-2xl font-bold text-primary drop-shadow-lg">
-              🎬 LiCam
-            </h1>
+    <div className="h-screen bg-black overflow-hidden">
+      {/* 纯黑色顶部导航栏 */}
+      <header className="h-16 bg-black border-b border-neutral-800">
+        <div className="flex items-center justify-between px-8 h-full">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-white rounded-lg">
+              <Video className="h-5 w-5 text-black" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-white">
+                LiCamFusion
+              </h1>
+              <p className="text-xs text-neutral-400">智能视频合成工具</p>
+            </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
-        </header>
-        
-        <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
-          {/* 左侧面板 - 文件目录选择 */}
-          <div className="w-80 bg-background/30 border-r border-border/30 backdrop-blur-sm">
-            <div className="h-full p-3 overflow-y-auto">
+          
+          {/* 状态指示器 */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm">
+              <div className={`w-2 h-2 rounded-full ${processing ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+              <span className="text-neutral-300">
+                {processing ? '处理中' : '就绪'}
+              </span>
+            </div>
+            <div className="h-4 w-px bg-neutral-700" />
+            <div className="flex items-center gap-2 text-sm text-neutral-400">
+              <FileVideo className="h-4 w-4" />
+              <span>{filteredFiles.length} 个文件</span>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
+        {/* 左侧面板 - 文件目录选择 */}
+        <div className="w-80 bg-neutral-900 border-r border-neutral-800">
+          <div className="h-full overflow-y-auto">
+            <div className="space-y-6">
               <FileSelector
                 sourceDir={sourceDir}
                 outputDir={outputDir}
@@ -231,10 +214,12 @@ function App() {
               />
             </div>
           </div>
+        </div>
 
-          {/* 中间面板 - 筛选条件和视频列表 */}
-          <div className="flex-1 bg-background/20 backdrop-blur-sm">
-            <div className="h-full p-4 overflow-y-auto">
+        {/* 中间面板 - 主工作区 */}
+        <div className="flex-1 bg-neutral-950">
+          <div className="h-full overflow-y-auto">
+            <div className="space-y-6">
               {/* 筛选选项 */}
               <FilterOptions
                 options={filterOptions}
@@ -246,18 +231,45 @@ function App() {
                 onScanFiles={handleScanFiles}
               />
 
-              {/* 文件列表 - 栅格布局 */}
+              {/* 文件列表 */}
               {filteredFiles.length > 0 && (
-                <div className="mt-4">
+                <div className="space-y-4 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 transition-all duration-300">
+                  <div className="flex items-center justify-between ml-6 mt-6">
+                    <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                      <div className="p-1 bg-white rounded">
+                        <FileVideo className="h-4 w-4 text-black" />
+                      </div>
+                      待处理视频
+                    </h3>
+                    <div className="text-sm text-neutral-400">
+                      {filteredFiles.length} 个文件准备合成
+                    </div>
+                  </div>
                   <FileList files={filteredFiles} />
+                </div>
+              )}
+              
+              {filteredFiles.length === 0 && scannedFiles.length > 0 && (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="p-4 bg-neutral-800 rounded-lg mb-4">
+                    <FileVideo className="h-12 w-12 text-neutral-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    没有符合条件的文件
+                  </h3>
+                  <p className="text-neutral-400 max-w-md">
+                    请调整筛选条件以查看可处理的视频文件
+                  </p>
                 </div>
               )}
             </div>
           </div>
+        </div>
 
-          {/* 右侧面板 - 视频处理信息 */}
-          <div className="w-[340px] bg-background/30 border-l border-border/30 backdrop-blur-sm">
-            <div className="h-full p-3 overflow-y-auto space-y-4">
+        {/* 右侧面板 - 视频处理信息 */}
+        <div className="w-80 bg-neutral-900 border-l border-neutral-800">
+          <div className="h-full overflow-y-auto">
+            <div className="space-y-6">
               {/* 处理面板 */}
               <ProcessingPanel
                 files={filteredFiles}
@@ -279,7 +291,7 @@ function App() {
           </div>
         </div>
       </div>
-    </ConfigProvider>
+    </div>
   );
 }
 
