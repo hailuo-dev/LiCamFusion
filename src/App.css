@@ -66,12 +66,7 @@ html, body {
   background: linear-gradient(90deg, transparent, #00d9ff, transparent);
 }
 
-.app-header .ant-typography {
-  color: #00d9ff !important;
-  margin: 0;
-  text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
-  font-weight: 600;
-}
+
 
 .main-layout {
   background: #0a0a0a;
@@ -102,19 +97,7 @@ html, body {
   transition: all 0.3s ease;
 }
 
-.feature-card .ant-card-body {
-  padding: 12px;
-}
 
-.feature-card .ant-card-head {
-  padding: 0 12px;
-  min-height: 36px;
-}
-
-.feature-card .ant-card-head-title {
-  font-size: 13px;
-  line-height: 36px;
-}
 
 .feature-card:hover {
   border-color: #00d9ff;
@@ -122,29 +105,7 @@ html, body {
   transform: translateY(-2px);
 }
 
-.feature-card .ant-card-head {
-  background: linear-gradient(135deg, #262626 0%, #1a1a1a 100%);
-  color: #00d9ff;
-  border-bottom: 1px solid #404040;
-  border-radius: 11px 11px 0 0;
-  position: relative;
-}
 
-.feature-card .ant-card-head::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 16px;
-  right: 16px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #00d9ff, transparent);
-}
-
-.feature-card .ant-card-head-title {
-  color: #00d9ff !important;
-  font-weight: 600;
-  text-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
-}
 
 .progress-container {
   background: #1a1a1a;
@@ -576,9 +537,7 @@ html, body {
   animation: slideInUp 0.5s ease-out;
 }
 
-.feature-card:hover .ant-card-head::after {
-  animation: pulse 2s infinite;
-}
+
 
 /* 响应式设计 */
 @media (max-width: 1200px) {
@@ -635,7 +594,5 @@ html, body {
     gap: 6px;
   }
   
-  .file-card-actions .ant-btn {
-    width: 100%;
-  }
+
 }

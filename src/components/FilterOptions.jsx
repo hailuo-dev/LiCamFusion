@@ -44,7 +44,7 @@ const FilterOptions = ({
   };
 
   return (
-    <div className="bg-neutral-900 border border-neutral-800 p-6 hover:border-neutral-700 transition-all duration-300">
+    <div className="bg-neutral-900 border border-neutral-800 p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 bg-white rounded-lg">
           <Filter className="h-5 w-5 text-black" />
@@ -55,7 +55,7 @@ const FilterOptions = ({
         {/* 筛选选项 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 日期筛选 */}
-          <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700 hover:border-neutral-600 transition-all duration-200">
+          <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
             <div className="flex items-center space-x-3">
               <Checkbox
                 checked={options.byDate}
@@ -65,7 +65,7 @@ const FilterOptions = ({
               />
               <label
                 htmlFor="date-filter"
-                className="flex items-center gap-2 text-sm font-medium cursor-pointer text-white hover:text-blue-300 transition-colors duration-200"
+                className="flex items-center gap-2 text-sm font-medium cursor-pointer text-white"
               >
                 <Calendar className="h-4 w-4 text-blue-300" />
                 按日期筛选
@@ -78,14 +78,14 @@ const FilterOptions = ({
                   value={options.selectedDate}
                   onChange={(e) => handleDateChange(e.target.value)}
                   disabled={disabled}
-                  className="w-full px-3 py-2 text-sm bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 hover:border-neutral-500 transition-all duration-200"
+                  className="w-full px-3 py-2 text-sm bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 cursor-pointer"
                 />
               </div>
             )}
           </div>
 
           {/* 时间筛选 */}
-          <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700 hover:border-neutral-600 transition-all duration-200">
+          <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
             <div className="flex items-center space-x-3">
               <Checkbox
                 checked={options.byHour}
@@ -95,7 +95,7 @@ const FilterOptions = ({
               />
               <label
                 htmlFor="hour-filter"
-                className="flex items-center gap-2 text-sm font-medium cursor-pointer text-white hover:text-green-300 transition-colors duration-200"
+                className="flex items-center gap-2 text-sm font-medium cursor-pointer text-white"
               >
                 <Clock className="h-4 w-4 text-green-300" />
                 按小时筛选
@@ -126,7 +126,7 @@ const FilterOptions = ({
           </div>
 
           {/* 视角筛选 */}
-          <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700 hover:border-neutral-600 transition-all duration-200">
+          <div className="space-y-3 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
             <div className="flex items-center space-x-3">
               <Checkbox
                 checked={options.byAngle}
@@ -136,7 +136,7 @@ const FilterOptions = ({
               />
               <label
                 htmlFor="angle-filter"
-                className="flex items-center gap-2 text-sm font-medium cursor-pointer text-white hover:text-purple-300 transition-colors duration-200"
+                className="flex items-center gap-2 text-sm font-medium cursor-pointer text-white"
               >
                 <Video className="h-4 w-4 text-purple-300" />
                 按视角筛选
@@ -161,11 +161,11 @@ const FilterOptions = ({
         {/* 黑色主题统计面板 */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-5 bg-neutral-800 rounded-lg border border-neutral-700">
           <div className="text-center group">
-            <div className="text-3xl font-bold text-white group-hover:scale-110 transition-transform duration-200">{scannedCount}</div>
+            <div className="text-3xl font-bold text-white">{scannedCount}</div>
             <div className="text-xs text-neutral-400 mt-1">已扫描文件</div>
           </div>
           <div className="text-center group">
-            <div className={`text-3xl font-bold group-hover:scale-110 transition-transform duration-200 ${filteredCount > 0 ? 'text-green-500' : 'text-red-500'}`}>
+            <div className={`text-3xl font-bold ${filteredCount > 0 ? 'text-green-500' : 'text-red-500'}`}>
               {filteredCount}
             </div>
             <div className="text-xs text-neutral-400 mt-1">符合条件</div>
@@ -183,7 +183,7 @@ const FilterOptions = ({
           <Button
             onClick={onScanFiles}
             disabled={!sourceDir || disabled}
-            className="w-full font-bold transform hover:scale-[1.02] py-3"
+            className="w-full font-bold cursor-pointer py-3"
             size="lg"
             variant="default"
           >

@@ -132,14 +132,76 @@ function App() {
 
   const handleFilesScanned = (files) => {
     setScannedFiles(files);
+    
+    // 计算符合条件的文件数量（基于当前筛选条件）
+    let filteredCount = files.length;
+    if (filterOptions.byDate || filterOptions.byHour || filterOptions.byAngle) {
+      let filtered = [...files];
+      
+      if (filterOptions.byDate) {
+        const targetDate = filterOptions.selectedDate;
+        filtered = filtered.filter(file => file.date === targetDate);
+      }
+      
+      if (filterOptions.byHour) {
+        filtered = filtered.filter(file => {
+          const fileHour = parseInt(file.time.split(':')[0]);
+          return fileHour === filterOptions.selectedHour;
+        });
+      }
+      
+      if (filterOptions.byAngle) {
+        filtered = filtered.filter(file => file.view_angle === filterOptions.selectedAngle);
+      }
+      
+      filteredCount = filtered.length;
+    }
+    
     setStatus({
-      message: `扫描完成，找到 ${files.length} 个视频文件`,
+      message: `扫描完成，找到 ${files.length} 个视频文件，其中 ${filteredCount} 个符合当前筛选条件`,
       type: 'success'
     });
   };
 
   const handleFilterChange = (newOptions) => {
     setFilterOptions(prev => ({ ...prev, ...newOptions }));
+    
+    // 更新状态提示，显示符合条件的文件数量
+    if (scannedFiles.length > 0) {
+      const updatedOptions = { ...filterOptions, ...newOptions };
+      let filtered = [...scannedFiles];
+      
+      if (updatedOptions.byDate) {
+        const targetDate = updatedOptions.selectedDate;
+        filtered = filtered.filter(file => file.date === targetDate);
+      }
+      
+      if (updatedOptions.byHour) {
+        filtered = filtered.filter(file => {
+          const fileHour = parseInt(file.time.split(':')[0]);
+          return fileHour === updatedOptions.selectedHour;
+        });
+      }
+      
+      if (updatedOptions.byAngle) {
+        filtered = filtered.filter(file => file.view_angle === updatedOptions.selectedAngle);
+      }
+      
+      const filteredCount = filtered.length;
+      const hasFilters = updatedOptions.byDate || updatedOptions.byHour || updatedOptions.byAngle;
+      
+      if (hasFilters) {
+        setStatus({
+          message: `筛选条件已更新，${filteredCount} 个文件符合条件`,
+          type: filteredCount > 0 ? 'success' : 'info'
+        });
+      } else {
+        setStatus({
+          message: `已清除所有筛选条件，显示全部 ${scannedFiles.length} 个文件`,
+          type: 'info'
+        });
+      }
+    }
   };
 
   const handleScanFiles = async () => {
@@ -171,9 +233,9 @@ function App() {
       <header className="h-16 bg-black border-b border-neutral-800">
         <div className="flex items-center justify-between px-8 h-full">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-white rounded-lg">
+            {/* <div className="p-2 bg-white rounded-lg">
               <Video className="h-5 w-5 text-black" />
-            </div>
+            </div> */}
             <div>
               <h1 className="text-xl font-bold text-white">
                 LiCamFusion
@@ -241,7 +303,7 @@ function App() {
                       </div>
                       待处理视频
                     </h3>
-                    <div className="text-sm text-neutral-400">
+                    <div className="text-sm text-neutral-400 pr-6">
                       {filteredFiles.length} 个文件准备合成
                     </div>
                   </div>

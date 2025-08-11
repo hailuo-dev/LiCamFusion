@@ -57,10 +57,10 @@ const FileSelector = ({
   };
 
   return (
-    <div className="bg-neutral-900 p-6 hover:border-neutral-700 transition-all duration-300">
+    <div className="bg-neutral-900 p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 bg-white rounded-lg">
-          <FolderOpen className="h-4 w-4 text-black" />
+          <FolderOpen className="h-5 w-5 text-black" />
         </div>
         <h3 className="text-lg font-semibold text-white">目录设置</h3>
       </div>
@@ -83,9 +83,9 @@ const FileSelector = ({
               size="sm"
               onClick={selectSourceDir}
               disabled={disabled}
-              className="shrink-0"
+              className="shrink-0 bg-neutral-800 border border-neutral-700 text-neutral-300 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:border-none hover:text-white cursor-pointer font-semibold transition-all duration-300"
             >
-              <FolderOpen className="h-4 w-4 mr-1" />
+              <FolderOpen className="h-4 w-4 mr-2" />
               浏览
             </Button>
           </div>
@@ -109,9 +109,9 @@ const FileSelector = ({
               size="sm"
               onClick={selectOutputDir}
               disabled={disabled}
-              className="shrink-0"
+              className="shrink-0 bg-neutral-800 border border-neutral-700 text-neutral-300 hover:bg-gradient-to-r hover:from-emerald-600 hover:to-green-600 hover:border-none hover:text-white cursor-pointer font-semibold transition-all duration-300"
             >
-              <FolderOpen className="h-4 w-4 mr-1" />
+              <FolderOpen className="h-4 w-4 mr-2" />
               浏览
             </Button>
           </div>

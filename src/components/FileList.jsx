@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import VideoThumbnail from './VideoThumbnail';
 import { 
   Video, 
   Eye, 
@@ -44,11 +45,11 @@ const FileList = ({ files }) => {
 
   const getAngleTag = (angle) => {
     return angle === 'F' ? 
-      <Badge className="bg-white text-black border-neutral-600">
+      <Badge className="bg-neutral-700 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 text-neutral-300 hover:text-white border-none shadow-md transition-all duration-300 cursor-pointer">
         <Video className="w-3 h-3 mr-1" />
         前视角
       </Badge> : 
-      <Badge className="bg-neutral-600 text-white border-neutral-500">
+      <Badge className="bg-neutral-700 hover:bg-gradient-to-r hover:from-neutral-500 hover:to-neutral-600 text-neutral-300 hover:text-white border-none shadow-md transition-all duration-300 cursor-pointer">
         <Video className="w-3 h-3 mr-1" />
         所有视角
       </Badge>;
@@ -56,38 +57,41 @@ const FileList = ({ files }) => {
 
   return (
     <>
-      <div className="bg-neutral-900 border border-neutral-800 p-6 hover:border-neutral-700 transition-all duration-300">
+      <div className="bg-neutral-900 border border-neutral-800 p-6">
         <div className="max-h-[600px] overflow-y-auto pr-2">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
             {files.map((file, index) => (
               <div 
                 key={file.path || index} 
-                className="relative bg-neutral-800 border border-neutral-700 rounded-lg p-4 hover:border-neutral-600 hover:bg-neutral-750 transition-all duration-300 group"
+                className="relative bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700 rounded-xl p-5 group backdrop-blur-sm cursor-pointer"
               >
-                  {/* 顶部装饰条 */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-white rounded-t-lg" />
+                  {/* 顶部装饰条 - 默认低调 */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-neutral-600 group-hover:bg-gradient-to-r group-hover:from-blue-500 group-hover:via-purple-500 group-hover:to-cyan-500 rounded-t-xl transition-all duration-300" />
                   
-                  {/* 文件序号角标 */}
-                  <div className="absolute top-3 right-3 w-6 h-6 bg-white rounded-full flex items-center justify-center text-black text-xs font-bold z-10">
+                  {/* 文件序号角标 - 默认低调 */}
+                  <div className="absolute top-4 right-4 w-8 h-8 bg-neutral-700 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-600 rounded-full flex items-center justify-center text-neutral-300 group-hover:text-white text-sm font-bold z-10 shadow-lg transition-all duration-300">
                     {index + 1}
                   </div>
 
-                  {/* 视频预览区域 */}
-                  <div className="relative h-20 mb-3 bg-neutral-700 rounded-lg flex items-center justify-center overflow-hidden">
-                    <Play className="h-8 w-8 text-white" />
+                  {/* 视频预览区域 - 显示缩略图 */}
+                  <div className="relative h-28 mb-4 rounded-xl overflow-hidden border border-neutral-600">
+                    <VideoThumbnail 
+                      file={file}
+                      className="w-full h-full"
+                    />
                     
                     {/* 悬停时显示的播放按钮 */}
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
                       <Button
                         size="sm"
                         variant="default"
-                        className="rounded-full transform hover:scale-110"
+                        className="rounded-full bg-neutral-700 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 border-none shadow-lg cursor-pointer transition-all duration-300"
                         onClick={(e) => {
                           e.stopPropagation();
                           playVideo(file);
                         }}
                       >
-                        <Play className="h-4 w-4" />
+                        <Play className="h-5 w-5 ml-1" />
                       </Button>
                     </div>
                   </div>
@@ -96,7 +100,7 @@ const FileList = ({ files }) => {
                   <div className="space-y-2">
                     <div>
                       <div 
-                        className="font-medium text-sm text-white cursor-pointer hover:text-neutral-300 transition-colors duration-200 line-clamp-1"
+                        className="font-semibold text-sm text-white cursor-pointer line-clamp-1"
                         title={file.filename}
                         onClick={() => showFileDetails(file)}
                       >
@@ -124,12 +128,12 @@ const FileList = ({ files }) => {
                       )}
                     </div>
 
-                    {/* 操作按钮 */}
-                    <div className="flex gap-2 pt-2">
+                    {/* 操作按钮 - 现代化设计 */}
+                    <div className="flex gap-3 pt-3">
                       <Button
                         variant="default"
                         size="sm"
-                        className="flex-1 text-xs"
+                        className="flex-1 text-xs bg-neutral-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 text-neutral-300 hover:text-white border-none shadow-md cursor-pointer transition-all duration-300"
                         onClick={(e) => {
                           e.stopPropagation();
                           playVideo(file);
@@ -142,7 +146,7 @@ const FileList = ({ files }) => {
                       <Button
                         variant="secondary"
                         size="sm"
-                        className="flex-1 text-xs"
+                        className="flex-1 text-xs bg-neutral-700 hover:bg-gradient-to-r hover:from-neutral-500 hover:to-neutral-600 text-neutral-300 hover:text-white border-none shadow-md cursor-pointer transition-all duration-300"
                         onClick={(e) => {
                           e.stopPropagation();
                           showFileDetails(file);

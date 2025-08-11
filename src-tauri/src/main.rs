@@ -20,7 +20,8 @@ fn main() {
             check_ffmpeg_available,
             test_progress_events,
             open_output_folder,
-            open_video_file
+            open_video_file,
+            get_thumbnail_data
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "LiCam",
+        "title": "LiCamFusion powered by HailuoDev",
         "width": 1400,
         "height": 900,
         "minWidth": 1000,

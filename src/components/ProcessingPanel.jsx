@@ -116,10 +116,10 @@ const ProcessingPanel = ({
   };
 
   return (
-    <div className="bg-neutral-900 p-6 hover:border-neutral-700 transition-all duration-300">
+    <div className="bg-neutral-900 p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 bg-white rounded-lg">
-          <Video className="h-4 w-4 text-black" />
+          <Video className="h-5 w-5 text-black" />
         </div>
         <h3 className="text-lg font-semibold text-white">视频处理</h3>
       </div>
@@ -127,9 +127,15 @@ const ProcessingPanel = ({
         {/* 处理信息 */}
         <div className="p-4 bg-neutral-800 border border-neutral-700 rounded-lg space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-neutral-300">文件数量:</span>
-            <Badge className="text-xs bg-white text-black">
-              {files.length}个
+            <span className="text-neutral-300">符合条件:</span>
+            <Badge className="text-xs bg-green-600 text-white">
+              {files.length}个文件
+            </Badge>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-neutral-300">筛选条件:</span>
+            <Badge className="text-xs bg-neutral-700 text-white border-neutral-600">
+              {getFilterSummary()}
             </Badge>
           </div>
           <div className="space-y-2">
@@ -155,7 +161,7 @@ const ProcessingPanel = ({
             onClick={startProcessing}
             disabled={!canProcess() || processing}
             variant={processing ? "warning" : "success"}
-            className="w-full font-bold transform hover:scale-[1.02]"
+            className="w-full font-bold cursor-pointer"
           >
             {processing ? (
               <>
@@ -200,6 +206,16 @@ const ProcessingPanel = ({
       </div>
     </div>
   );
+
+  function getFilterSummary() {
+    const activeFilters = [];
+    if (filterOptions.byDate) activeFilters.push(`日期: ${filterOptions.selectedDate}`);
+    if (filterOptions.byHour) activeFilters.push(`时间: ${filterOptions.selectedHour}时`);
+    if (filterOptions.byAngle) activeFilters.push(`视角: ${filterOptions.selectedAngle === 'F' ? '前视角' : '所有视角'}`);
+    
+    if (activeFilters.length === 0) return '无筛选条件';
+    return activeFilters.join(' + ');
+  }
 
   function getMergeTypeDescription() {
     const mergeType = getMergeType();

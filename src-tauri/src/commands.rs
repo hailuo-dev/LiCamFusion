@@ -14,6 +14,7 @@ pub struct VideoFileDto {
     pub time: String,
     pub view_angle: String,
     pub size: Option<u64>,
+    pub thumbnail_path: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -43,6 +44,9 @@ impl From<VideoFile> for VideoFileDto {
             .ok()
             .map(|m| m.len());
 
+        // 查找同名的图片文件
+        let thumbnail_path = find_thumbnail_for_video(&video_file.path);
+
         VideoFileDto {
             path: video_file.path.display().to_string(),
             filename,
@@ -51,8 +55,29 @@ impl From<VideoFile> for VideoFileDto {
             time: video_file.time.format("%H:%M:%S").to_string(),
             view_angle: video_file.view_angle,
             size,
+            thumbnail_path,
         }
     }
+}
+
+/// 查找视频文件对应的缩略图
+fn find_thumbnail_for_video(video_path: &PathBuf) -> Option<String> {
+    // 支持的图片格式
+    let image_extensions = ["jpg", "jpeg", "png", "bmp", "webp"];
+    
+    // 获取视频文件的目录和文件名（不含扩展名）
+    let parent_dir = video_path.parent()?;
+    let file_stem = video_path.file_stem()?.to_str()?;
+    
+    // 查找同名的图片文件
+    for ext in &image_extensions {
+        let thumbnail_path = parent_dir.join(format!("{}.{}", file_stem, ext));
+        if thumbnail_path.exists() {
+            return Some(thumbnail_path.display().to_string());
+        }
+    }
+    
+    None
 }
 
 impl TryFrom<MergeTypeDto> for MergeType {
@@ -235,6 +260,20 @@ pub async fn open_output_folder(output_path: String) -> Result<(), String> {
     }
 
     Ok(())
+}
+
+#[command]
+pub async fn get_thumbnail_data(thumbnail_path: String) -> Result<Vec<u8>, String> {
+    let path = PathBuf::from(&thumbnail_path);
+    
+    // 检查文件是否存在
+    if !path.exists() {
+        return Err(format!("缩略图文件不存在: {}", thumbnail_path));
+    }
+    
+    // 读取文件内容
+    std::fs::read(&path)
+        .map_err(|e| format!("读取缩略图文件失败: {}", e))
 }
 
 #[command]
